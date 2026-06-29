@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Gestión de Turnos Inteligente</title>
+  <link rel="stylesheet" href="src/styles/main.css" />
+</head>
+<body>
+  <!-- WCAG 2.1.1: Enlace de salto para usuarios de teclado. -->
+  <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="app-header">
+    <div class="brand">
+      <!-- WCAG 1.1.1: Elemento visual con texto alternativo. -->
+      <span class="brand-mark" role="img" aria-label="Escudo institucional">GT</span>
+      <div>
+        <p class="eyebrow">Gobierno Digital</p>
+        <h1>Sistema de Gestión de Turnos Inteligente</h1>
+      </div>
+    </div>
+
+    <!-- WCAG 2.1.1 y 4.1.2: Menú hamburguesa operable por teclado y con estado aria-expanded. -->
+    <nav class="drawer-nav" aria-label="Menú principal">
+      <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="drawerMenu">
+        <span class="hamburger" role="img" aria-label="Abrir menú">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        Menú
+      </button>
+
+      <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+      <aside class="drawer" id="drawerMenu" aria-label="Opciones del sistema" hidden>
+        <div class="drawer-heading">
+          <strong>Vistas disponibles</strong>
+          <button class="icon-button" id="closeMenuButton" type="button" aria-label="Cerrar menú">×</button>
+        </div>
+        <a href="#inicio" data-route="inicio">Inicio</a>
+        <a href="#registro" data-route="registro">Registro / Login ciudadano</a>
+        <a href="#reserva" data-route="reserva">Selección y reserva</a>
+        <a href="#seguimiento" data-route="seguimiento">Confirmación y seguimiento</a>
+        <a href="#accesibilidad" data-route="accesibilidad">Accesibilidad WCAG</a>
+      </aside>
+    </nav>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <!-- WCAG 4.1.3: Región viva para comunicar cambios de estado sin depender solo del color. -->
+    <section class="system-status" aria-labelledby="systemStatusTitle">
+      <h2 id="systemStatusTitle" class="sr-only">Estado del sistema</h2>
+      <p id="globalStatus" role="status" aria-live="polite">
+        <span class="status-icon" role="img" aria-label="Información">i</span>
+        <span><strong>Información:</strong> Use el menú para cambiar de vista. No hay límite de tiempo para completar los formularios.</span>
+      </p>
+    </section>
+
+    <!-- Contenedor escalable: nuevas vistas pueden agregarse como section.app-view. -->
+    <section class="app-view is-active" id="view-inicio" data-view="inicio" aria-labelledby="inicioTitle">
+      <h2 id="inicioTitle" class="sr-only">Inicio</h2>
+      <div class="landing-placeholder" aria-label="Zona de inicio reservada para futura landing">
+        <section class="intro-panel" aria-labelledby="introTitle">
+          <img src="public/assets/turnos-introduccion.png" alt="Ilustración de una ciudadana agendando un turno en un calendario junto a un reloj" />
+          <div class="intro-copy">
+            <p class="step-label">Atención ciudadana digital</p>
+            <h3 id="introTitle">Gestione sus turnos de forma rápida y accesible</h3>
+            <p>Esta página ayuda a registrar al ciudadano, reservar un horario disponible y consultar el seguimiento del turno con un token. El sistema muestra la sede, oficina, funcionario asignado, fecha y hora para que la atención sea más clara y ordenada.</p>
+          </div>
+        </section>
+
+        <section class="video-placeholder" aria-labelledby="videoPlaceholderTitle">
+          <div class="video-frame" role="img" aria-label="Espacio reservado para video institucional accesible">
+            <span>Video</span>
+          </div>
+          <div>
+            <h3 id="videoPlaceholderTitle">Video de ayuda institucional</h3>
+            <p>Espacio reservado para agregar un video explicativo. Cuando se incorpore, debe incluir subtítulos, transcripción y audiodescripción.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="app-view" id="view-registro" data-view="registro" aria-labelledby="registroTitle" hidden>
+      <div class="view-shell">
+        <div class="view-intro">
+          <p class="step-label">Vista 1</p>
+          <h2 id="registroTitle">Registro / Login ciudadano</h2>
+          <p>Identifique al ciudadano para habilitar la reserva de turnos.</p>
+        </div>
+        <form class="form-card" id="citizenForm" novalidate>
+          <fieldset>
+            <legend>Datos del ciudadano</legend>
+            <div class="field" data-field="nombre">
+              <div class="label-row">
+                <label for="nombre">Nombre completo <span aria-hidden="true">*</span></label>
+                <span class="tooltip-wrap">
+                  <button class="tooltip-button" type="button" aria-describedby="tipNombre" aria-label="Ayuda sobre nombre completo">?</button>
+                  <span class="tooltip" id="tipNombre" role="tooltip">Escriba nombres y apellidos como constan en su documento.</span>
+                </span>
+              </div>
+              <input id="nombre" name="nombre" type="text" autocomplete="name" aria-required="true" aria-describedby="hintNombre errorNombre" />
+              <p class="hint" id="hintNombre">Ejemplo: María Fernanda Pérez López.</p>
+              <p class="error-text" id="errorNombre"></p>
+            </div>
+
+            <div class="field" data-field="cedula">
+              <div class="label-row">
+                <label for="cedula">Cédula <span aria-hidden="true">*</span></label>
+                <span class="tooltip-wrap">
+                  <button class="tooltip-button" type="button" aria-describedby="tipCedula" aria-label="Ayuda sobre cédula">?</button>
+                  <span class="tooltip" id="tipCedula" role="tooltip">Ingrese 10 dígitos sin guiones ni espacios.</span>
+                </span>
+              </div>
+              <input id="cedula" name="cedula" type="text" inputmode="numeric" maxlength="10" aria-required="true" aria-describedby="hintCedula errorCedula" />
+              <p class="hint" id="hintCedula">Formato: 10 números.</p>
+              <p class="error-text" id="errorCedula"></p>
+            </div>
+
+            <div class="field" data-field="correo">
+              <label for="correo">Correo electrónico <span aria-hidden="true">*</span></label>
+              <input id="correo" name="correo" type="email" autocomplete="email" aria-required="true" aria-describedby="hintCorreo errorCorreo" />
+              <p class="hint" id="hintCorreo">Se usará para enviar la confirmación del turno.</p>
+              <p class="error-text" id="errorCorreo"></p>
+            </div>
+
+            <div class="field" data-field="telefono">
+              <label for="telefono">Teléfono <span aria-hidden="true">*</span></label>
+              <input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" aria-required="true" aria-describedby="hintTelefono errorTelefono" />
+              <p class="hint" id="hintTelefono">Entre 7 y 10 números.</p>
+              <p class="error-text" id="errorTelefono"></p>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit">Ingresar ciudadano</button>
+            <button type="reset" class="secondary-button">Limpiar</button>
+          </div>
+          <div class="form-result" id="registroResult" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="app-view" id="view-reserva" data-view="reserva" aria-labelledby="reservaTitle" hidden>
+      <div class="view-shell">
+        <div class="view-intro">
+          <p class="step-label">Vista 2</p>
+          <h2 id="reservaTitle">Selección y reserva de turno</h2>
+          <p>Complete los datos del trámite. Al confirmar se generará un token de seguimiento.</p>
+        </div>
+        <form class="form-card" id="appointmentForm" novalidate>
+          <fieldset>
+            <legend>Datos de la reserva</legend>
+            <div class="field" data-field="tramite">
+              <label for="tramite">Tipo de trámite <span aria-hidden="true">*</span></label>
+              <select id="tramite" name="tramite" aria-required="true" aria-describedby="errorTramite">
+                <option value="">Seleccione una opción</option>
+                <option value="Cedulación">Cedulación</option>
+                <option value="Licencia de funcionamiento">Licencia de funcionamiento</option>
+                <option value="Certificado municipal">Certificado municipal</option>
+                <option value="Pago de obligaciones">Pago de obligaciones</option>
+              </select>
+              <p class="error-text" id="errorTramite"></p>
+            </div>
+
+            <div class="field" data-field="sede">
+              <div class="label-row">
+                <label for="sede">Sede <span aria-hidden="true">*</span></label>
+                <span class="tooltip-wrap">
+                  <button class="tooltip-button" type="button" aria-describedby="tipSede" aria-label="Ayuda sobre sede">?</button>
+                  <span class="tooltip" id="tipSede" role="tooltip">Seleccione la oficina más cercana o con disponibilidad.</span>
+                </span>
+              </div>
+              <select id="sede" name="sede" aria-required="true" aria-describedby="errorSede">
+                <option value="">Seleccione una sede</option>
+                <option value="Centro de Atención Norte">Centro de Atención Norte</option>
+                <option value="Centro de Atención Centro">Centro de Atención Centro</option>
+                <option value="Centro de Atención Sur">Centro de Atención Sur</option>
+              </select>
+              <p class="error-text" id="errorSede"></p>
+            </div>
+
+            <div class="field" data-field="fecha">
+              <label for="fecha">Fecha <span aria-hidden="true">*</span></label>
+              <input id="fecha" name="fecha" type="date" aria-required="true" aria-describedby="hintFecha errorFecha" />
+              <p class="hint" id="hintFecha">Seleccione una fecha igual o posterior al día actual.</p>
+              <p class="error-text" id="errorFecha"></p>
+            </div>
+
+            <div class="field" data-field="hora">
+              <label for="hora">Hora <span aria-hidden="true">*</span></label>
+              <select id="hora" name="hora" aria-required="true" aria-describedby="errorHora">
+                <option value="">Seleccione una hora</option>
+                <option value="08:30">08:30</option>
+                <option value="10:00">10:00</option>
+                <option value="11:30">11:30</option>
+                <option value="14:00">14:00</option>
+                <option value="15:30">15:30</option>
+              </select>
+              <p class="error-text" id="errorHora"></p>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit">Reservar turno</button>
+            <button type="reset" class="secondary-button">Limpiar</button>
+          </div>
+          <div class="form-result" id="reservaResult" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="app-view" id="view-seguimiento" data-view="seguimiento" aria-labelledby="seguimientoTitle" hidden>
+      <div class="view-shell">
+        <div class="view-intro">
+          <p class="step-label">Vista 3</p>
+          <h2 id="seguimientoTitle">Confirmación y seguimiento del turno</h2>
+          <p>Ingrese el token generado en la reserva para consultar la información del turno.</p>
+        </div>
+        <form class="form-card" id="trackingForm" novalidate>
+          <fieldset>
+            <legend>Consulta de seguimiento</legend>
+            <div class="field" data-field="codigo">
+              <div class="label-row">
+                <label for="codigo">Token de turno <span aria-hidden="true">*</span></label>
+                <span class="tooltip-wrap">
+                  <button class="tooltip-button" type="button" aria-describedby="tipCodigo" aria-label="Ayuda sobre token de turno">?</button>
+                  <span class="tooltip" id="tipCodigo" role="tooltip">Use el token recibido al reservar. Ejemplo: TUR-123456.</span>
+                </span>
+              </div>
+              <input id="codigo" name="codigo" type="text" autocomplete="off" aria-required="true" aria-describedby="hintCodigo errorCodigo" />
+              <p class="hint" id="hintCodigo">Formato: TUR- seguido de 6 números.</p>
+              <p class="error-text" id="errorCodigo"></p>
+            </div>
+
+            <div class="field" data-field="estado">
+              <label for="estado">Estado del trámite</label>
+              <input id="estado" name="estado" type="text" value="Pendiente de consulta" readonly aria-readonly="true" aria-describedby="hintEstado" />
+              <p class="hint" id="hintEstado">Este campo se actualiza después de consultar el token.</p>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit">Consultar seguimiento</button>
+            <button type="reset" class="secondary-button">Limpiar</button>
+          </div>
+          <div class="form-result" id="seguimientoResult" role="status" aria-live="polite"></div>
+        </form>
+
+        <article class="tracking-card" id="trackingDetails" aria-labelledby="trackingDetailsTitle" hidden>
+          <h3 id="trackingDetailsTitle">Información del turno agendado</h3>
+          <dl>
+            <div><dt>Token</dt><dd id="detailToken">-</dd></div>
+            <div><dt>Ciudadano</dt><dd id="detailCitizen">-</dd></div>
+            <div><dt>Trámite</dt><dd id="detailProcedure">-</dd></div>
+            <div><dt>Sede</dt><dd id="detailOffice">-</dd></div>
+            <div><dt>Oficina</dt><dd id="detailRoom">-</dd></div>
+            <div><dt>Funcionario asignado</dt><dd id="detailAgent">-</dd></div>
+            <div><dt>Fecha</dt><dd id="detailDate">-</dd></div>
+            <div><dt>Hora</dt><dd id="detailTime">-</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="app-view" id="view-accesibilidad" data-view="accesibilidad" aria-labelledby="accessibilityTitle" hidden>
+      <div class="view-shell accessibility-shell">
+        <div class="view-intro">
+          <p class="step-label">Módulo accesible</p>
+          <h2 id="accessibilityTitle">Accesibilidad WCAG 2.2</h2>
+          <p>LÓPEZ MACIAS DERLIS</p>
+          <p>Esta vista documenta cómo el formulario cubre alternativas textuales, multimedia, color, contraste, texto, tiempo, movimiento y orientación.</p>
+        </div>
+
+        <div class="accessibility-panel">
+          <section class="translator-card" aria-labelledby="translatorTitle">
+            <h3 id="translatorTitle">Traductor de ayuda</h3>
+            <p id="translatorDescription">Seleccione un idioma para mostrar una alternativa textual equivalente de la ayuda del sistema.</p>
+            <label for="languageSelector">Idioma</label>
+            <select id="languageSelector" aria-describedby="translatorDescription">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="qu">Kichwa básico</option>
+            </select>
+            <div class="translated-help" id="translatedHelp" role="status" aria-live="polite"></div>
+          </section>
+
+          <section aria-labelledby="wcagTextMediaTitle">
+            <h3 id="wcagTextMediaTitle">Alternativas textuales y multimedia</h3>
+            <div class="criteria-grid">
+              <article class="criterion-card">
+                <h4>1.1.1 Contenido no textual</h4>
+                <p>Los iconos del menú, información, ayuda y marca institucional usan texto visible o `aria-label` para lectores de pantalla.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.2.1 Transcripción audio y video</h4>
+                <p>La ayuda multimedia futura tiene una transcripción textual equivalente. No se usa audio sin alternativa.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.2.2 Subtítulos grabados</h4>
+                <p>Si se agrega video grabado, esta arquitectura reserva el texto de subtítulos en esta vista de accesibilidad.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.2.3 Audiodescripción</h4>
+                <p>La descripción textual explica los pasos visuales: registro, reserva, token y seguimiento.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.2.4 Subtítulos en directo</h4>
+                <p>No hay transmisión en directo. Si se incorpora, se debe conectar una fuente de subtítulos en vivo.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.2.5 Audiodescripción grabada</h4>
+                <p>La alternativa textual documenta el contenido visual equivalente para material grabado futuro.</p>
+              </article>
+            </div>
+          </section>
+
+          <section aria-labelledby="wcagColorTitle">
+            <h3 id="wcagColorTitle">Color, contraste y texto</h3>
+            <div class="criteria-grid">
+              <article class="criterion-card">
+                <h4>1.4.1 Uso del color</h4>
+                <p>Los errores no dependen solo del color: muestran texto explícito, borde, estado `aria-invalid` y región viva.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.3 Contraste mínimo 4,5:1</h4>
+                <p>La paleta principal usa azul oscuro `#0A1F44` sobre blanco para asegurar contraste alto.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.4 Cambio tamaño texto 200%</h4>
+                <p>La interfaz usa unidades relativas y contenedores flexibles para soportar ampliación de texto.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.5 Imágenes de texto</h4>
+                <p>No se usan imágenes para representar texto funcional. Todo el contenido relevante es HTML real.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.10 Reajuste de elementos</h4>
+                <p>Las vistas se reacomodan en una sola columna en pantallas pequeñas.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.11 Contraste no textual</h4>
+                <p>Bordes, controles, foco visible y estados usan contraste suficiente contra el fondo.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.12 Espaciado de texto</h4>
+                <p>La lectura conserva line-height amplio y no fija alturas rígidas que rompan el espaciado.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.13 Cursor o foco</h4>
+                <p>Los tooltips se muestran al pasar el cursor y también cuando el botón recibe foco por teclado.</p>
+              </article>
+            </div>
+          </section>
+
+          <section aria-labelledby="wcagMotionTitle">
+            <h3 id="wcagMotionTitle">Tiempo, movimiento y orientación</h3>
+            <div class="criteria-grid">
+              <article class="criterion-card">
+                <h4>1.3.4 Orientación de pantalla</h4>
+                <p>El diseño no fuerza orientación vertical u horizontal; responde a ambas.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>1.4.2 Control del audio</h4>
+                <p>No existe audio automático. Si se agrega audio, deberá incluir controles para pausar o detener.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>2.2.1 Tiempo ajustable</h4>
+                <p>No hay límite de tiempo para completar registro, reserva o seguimiento.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>2.2.2 Poner en pausa, detener, ocultar</h4>
+                <p>No hay carruseles ni contenido automático. Los diálogos se cierran manualmente.</p>
+              </article>
+              <article class="criterion-card">
+                <h4>2.3.1 Tres destellos o menos</h4>
+                <p>No se usan animaciones con destellos ni parpadeos.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- WCAG 1.2.1 a 1.2.5: Alternativa textual para ayuda multimedia futura, sin audio sin transcripción. -->
+    <section class="help-section" aria-labelledby="helpTitle">
+      <h2 id="helpTitle">Ayuda accesible</h2>
+      <div class="media-alternative">
+        <span class="media-icon" role="img" aria-label="Ayuda multimedia accesible">?</span>
+        <p>Alternativa textual al video de ayuda: registre o ingrese al ciudadano, reserve un turno, copie el token generado y consulte el seguimiento con los datos de oficina, funcionario, fecha y hora asignada.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- WCAG 1.4.4, 1.4.3, 1.4.13: controles pequeños visibles en todas las vistas. -->
+  <aside class="accessibility-toolbar" aria-label="Opciones rápidas de accesibilidad">
+    <button type="button" class="accessibility-menu-button" id="accessibilityMenuButton" aria-expanded="false" aria-controls="accessibilityMenu">
+      Accesibilidad
+    </button>
+    <div class="accessibility-menu" id="accessibilityMenu" hidden>
+      <button type="button" class="accessibility-button" id="decreaseTextButton" aria-label="Disminuir tamaño del texto">A-</button>
+      <button type="button" class="accessibility-button" id="increaseTextButton" aria-label="Aumentar tamaño del texto">A+</button>
+      <button type="button" class="accessibility-button" id="contrastButton" aria-pressed="false" aria-label="Activar alto contraste">Contraste</button>
+      <button type="button" class="accessibility-button" id="spacingButton" aria-pressed="false" aria-label="Activar espaciado de texto accesible">Espaciado</button>
+      <button type="button" class="accessibility-button" id="reflowButton" aria-pressed="false" aria-label="Activar reajuste de elementos en una columna">Reajuste</button>
+      <button type="button" class="accessibility-button" id="textCuesButton" aria-pressed="false" aria-label="Activar señales textuales además del color">No solo color</button>
+      <button type="button" class="accessibility-button" id="imageTextButton" aria-pressed="false" aria-label="Comprobar imágenes de texto">Img texto</button>
+      <button type="button" class="accessibility-button" id="nonTextContrastButton" aria-pressed="false" aria-label="Reforzar contraste no textual">Bordes</button>
+      <button type="button" class="accessibility-button" id="hoverFocusButton" aria-pressed="false" aria-label="Mostrar contenido al cursor o foco">Tooltips</button>
+      <button type="button" class="accessibility-button" id="motionButton" aria-pressed="false" aria-label="Reducir movimiento de la interfaz">Movimiento</button>
+      <button type="button" class="accessibility-button" id="audioControlButton" aria-label="Detener audio o lectura en voz alta">Audio off</button>
+      <button type="button" class="accessibility-button" id="orientationButton" aria-label="Confirmar orientación libre de pantalla">Orientación</button>
+      <button type="button" class="accessibility-button" id="timeButton" aria-label="Confirmar que no existe límite de tiempo">Sin límite</button>
+      <button type="button" class="accessibility-button" id="pauseHideButton" aria-pressed="false" aria-label="Ocultar o mostrar contenido auxiliar">Ocultar</button>
+      <button type="button" class="accessibility-button" id="accessibilityViewButton" aria-label="Abrir criterios WCAG">WCAG</button>
+    </div>
+  </aside>
+
+  <!-- WCAG 1.4.2: Control independiente para iniciar, silenciar y ajustar volumen de lectura por voz. -->
+  <details class="sound-panel" aria-label="Control de sonido">
+    <summary class="sound-menu-button" aria-label="Abrir controles de sonido">
+      <img src="public/assets/sound-icon.png" alt="" aria-hidden="true" />
+    </summary>
+    <div class="sound-menu" id="soundMenu">
+      <button type="button" class="sound-button" id="readViewButton" aria-pressed="false" aria-label="Leer en voz alta la vista actual">Leer</button>
+      <button type="button" class="sound-button" id="muteSoundButton" aria-pressed="false" aria-label="Silenciar lectura en voz alta">Mute</button>
+      <label class="sound-slider-label" for="soundVolume">Volumen <span id="soundVolumeValue">80%</span></label>
+      <input class="sound-slider" id="soundVolume" type="range" min="0" max="100" value="80" aria-label="Volumen de lectura en voz alta" />
+    </div>
+  </details>
+
+  <!-- WCAG 1.4.13 y 4.1.2: Diálogo accesible para confirmaciones y token generado. -->
+  <dialog class="app-dialog" id="appDialog" aria-labelledby="dialogTitle" aria-describedby="dialogMessage">
+    <h2 id="dialogTitle">Confirmación</h2>
+    <p id="dialogMessage"></p>
+    <div class="dialog-token" id="dialogToken" hidden></div>
+    <div class="actions">
+      <button type="button" id="dialogPrimaryButton">Aceptar</button>
+      <button type="button" class="secondary-button" id="dialogSecondaryButton" hidden>Ir a seguimiento</button>
+    </div>
+  </dialog>
+
+  <script src="src/lib/storage.js"></script>
+  <script src="src/lib/validators.js"></script>
+  <script src="src/lib/appointments.js"></script>
+  <script src="src/components/menu.js"></script>
+  <script src="src/components/dialog.js"></script>
+  <script src="src/components/translator.js"></script>
+  <script src="src/components/accessibility-controls.js"></script>
+  <script src="src/components/speech-reader.js"></script>
+  <script src="src/views/router.js"></script>
+  <script src="src/views/registro.js"></script>
+  <script src="src/views/reserva.js"></script>
+  <script src="src/views/seguimiento.js"></script>
+  <script src="src/views/accesibilidad.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
