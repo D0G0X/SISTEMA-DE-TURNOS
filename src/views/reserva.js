@@ -39,6 +39,7 @@
       TurnosStorage.update((currentState) => {
         currentState.appointments.push(appointment);
       });
+      TurnosSync.saveAppointment(appointment);
 
       document.getElementById('codigo').value = appointment.token;
       document.getElementById('estado').value = appointment.estado;

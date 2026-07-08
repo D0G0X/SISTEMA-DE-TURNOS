@@ -23,6 +23,7 @@
       TurnosStorage.update((state) => {
         state.citizen = citizen;
       });
+      TurnosSync.saveCitizen(citizen);
 
       result.className = 'form-result success';
       result.textContent = 'Ciudadano identificado correctamente. Ya puede reservar un turno.';

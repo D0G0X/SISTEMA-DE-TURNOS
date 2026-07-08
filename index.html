@@ -22,6 +22,7 @@
 
     <!-- WCAG 2.1.1 y 4.1.2: Menú hamburguesa operable por teclado y con estado aria-expanded. -->
     <nav class="drawer-nav" aria-label="Menú principal">
+      <button class="lang-toggle" id="langToggle" type="button" aria-label="Translate page to English" title="English">EN</button>
       <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="drawerMenu">
         <span class="hamburger" role="img" aria-label="Abrir menú">
           <span></span>
@@ -599,6 +600,7 @@
   </dialog>
 
   <script src="src/lib/storage.js"></script>
+  <script src="src/lib/sync.js"></script>
   <script src="src/lib/validators.js"></script>
   <script src="src/lib/appointments.js"></script>
   <script src="src/components/menu.js"></script>
@@ -612,5 +614,6 @@
   <script src="src/views/seguimiento.js"></script>
   <script src="src/views/accesibilidad.js"></script>
   <script src="src/app.js"></script>
+  <script src="src/i18n.js"></script>
 </body>
 </html>

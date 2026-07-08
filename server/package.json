@@ -1,0 +1,10 @@
+{
+  "name": "turnos-server",
+  "private": true,
+  "type": "module",
+  "description": "API de sincronizacion a Postgres + chatbot de consulta (Grok + MCP)",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "pg": "^8.13.0"
+  }
+}

@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: turnos-db
+    environment:
+      POSTGRES_DB: turnos
+      POSTGRES_USER: turnos
+      POSTGRES_PASSWORD: turnos
+    ports:
+      # ponytail: 5433 en el host porque 5432 ya lo usa otro Postgres local
+      - "5433:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - turnos_data:/var/lib/postgresql/data
+
+volumes:
+  turnos_data:
