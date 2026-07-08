@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -35,13 +35,14 @@
       <aside class="drawer" id="drawerMenu" aria-label="Opciones del sistema" hidden>
         <div class="drawer-heading">
           <strong>Vistas disponibles</strong>
-          <button class="icon-button" id="closeMenuButton" type="button" aria-label="Cerrar menú">×</button>
+          <button class="icon-button" id="closeMenuButton" type="button" aria-label="Cerrar men?">?</button>
         </div>
         <a href="#inicio" data-route="inicio">Inicio</a>
         <a href="#registro" data-route="registro">Registro / Login ciudadano</a>
         <a href="#reserva" data-route="reserva">Selección y reserva</a>
         <a href="#seguimiento" data-route="seguimiento">Confirmación y seguimiento</a>
         <a href="#accesibilidad" data-route="accesibilidad">Accesibilidad WCAG</a>
+        <a href="#admin" data-route="admin" data-admin-only hidden>Administraci?n</a>
       </aside>
     </nav>
   </header>
@@ -60,151 +61,60 @@
     <section class="app-view is-active" id="view-inicio" data-view="inicio" aria-labelledby="inicioTitle">
       <h2 id="inicioTitle" class="sr-only">Inicio</h2>
       <div class="landing-placeholder" aria-label="Zona de inicio reservada para futura landing">
-
-        <!-- Landing: Hero -->
-        <section class="hero" aria-labelledby="heroTitle">
-          <div class="hero-copy">
-            <p class="eyebrow hero-eyebrow">Atención ciudadana digital</p>
-            <h3 id="heroTitle" class="hero-title">Su turno del Estado, sin filas y a su ritmo</h3>
-            <p class="hero-lead">Registre al ciudadano, reserve un horario y siga su turno con un token. Todo claro, ordenado y accesible.</p>
-            <div class="hero-cta">
-              <a class="btn btn-primary" href="#reserva" data-route="reserva">Reservar un turno</a>
-              <a class="btn btn-ghost" href="#seguimiento" data-route="seguimiento">Consultar seguimiento</a>
-            </div>
-            <ul class="hero-trust" aria-label="Beneficios del servicio">
-              <li>Sin límite de tiempo</li>
-              <li>Sedes y horarios reales</li>
-              <li>Accesible WCAG 2.2</li>
-            </ul>
-          </div>
-          <figure class="hero-media">
-            <img src="public/assets/turnos-introduccion.png" alt="Ilustración de una ciudadana agendando un turno en un calendario junto a un reloj" />
-          </figure>
-        </section>
-
-        <!-- Landing: Sección introductoria -->
         <section class="intro-panel" aria-labelledby="introTitle">
+          <img src="public/assets/turnos-introduccion.png" alt="Ilustración de una ciudadana agendando un turno en un calendario junto a un reloj" />
           <div class="intro-copy">
-            <p class="step-label">Qué resuelve este sistema</p>
+            <p class="step-label">Atención ciudadana digital</p>
             <h3 id="introTitle">Gestione sus turnos de forma rápida y accesible</h3>
             <p>Esta página ayuda a registrar al ciudadano, reservar un horario disponible y consultar el seguimiento del turno con un token. El sistema muestra la sede, oficina, funcionario asignado, fecha y hora para que la atención sea más clara y ordenada.</p>
           </div>
-          <ul class="benefit-grid" aria-label="Ventajas del servicio">
-            <li class="benefit">
-              <span class="benefit-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              </span>
-              <span class="benefit-text"><strong>Atención más ágil</strong>Reserve un horario y evite esperas innecesarias.</span>
-            </li>
-            <li class="benefit">
-              <span class="benefit-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v4a2 2 0 0 0 0 4v2H4v-2a2 2 0 0 0 0-4z"/><path d="M9 7v12"/></svg>
-              </span>
-              <span class="benefit-text"><strong>Token de seguimiento</strong>Cada reserva genera un código para consultar su estado.</span>
-            </li>
-            <li class="benefit">
-              <span class="benefit-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              </span>
-              <span class="benefit-text"><strong>Sedes y funcionarios</strong>Vea oficina, agente asignado, fecha y hora del trámite.</span>
-            </li>
-            <li class="benefit">
-              <span class="benefit-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="8" r="1.4"/><path d="M8.5 11h7M12 11v6M12 17l-2.2 2.5M12 17l2.2 2.5"/></svg>
-              </span>
-              <span class="benefit-text"><strong>Diseñado para todos</strong>Contraste, teclado, lectura por voz y ajustes WCAG.</span>
-            </li>
-          </ul>
         </section>
 
-        <!-- Landing: Cómo funciona -->
-        <section class="steps" aria-labelledby="stepsTitle">
-          <div class="steps-head">
-            <p class="step-label">Cómo funciona</p>
-            <h3 id="stepsTitle">Tres pasos para agendar y seguir su turno</h3>
-          </div>
-          <ol class="steps-list">
-            <li class="step-card">
-              <span class="step-num" aria-hidden="true">1</span>
-              <h4>Identifíquese</h4>
-              <p>Ingrese los datos del ciudadano en el registro para habilitar la reserva.</p>
-              <a class="step-link" href="#registro" data-route="registro">Ir a registro</a>
-            </li>
-            <li class="step-card">
-              <span class="step-num" aria-hidden="true">2</span>
-              <h4>Reserve el turno</h4>
-              <p>Elija trámite, sede, fecha y hora. Al confirmar se genera su token.</p>
-              <a class="step-link" href="#reserva" data-route="reserva">Ir a reserva</a>
-            </li>
-            <li class="step-card">
-              <span class="step-num" aria-hidden="true">3</span>
-              <h4>Siga su turno</h4>
-              <p>Consulte el token para ver estado, oficina, funcionario, fecha y hora.</p>
-              <a class="step-link" href="#seguimiento" data-route="seguimiento">Ir a seguimiento</a>
-            </li>
-          </ol>
-        </section>
-
-        <!-- Landing: Video institucional de ayuda (reproductor accesible WCAG) -->
         <section class="video-placeholder" aria-labelledby="videoPlaceholderTitle">
-          <figure class="video-figure">
-            <!--
-              REPRODUCTOR LISTO PARA EL ARCHIVO REAL. Al incorporar el video:
-                1) Colocá el archivo en public/assets/ayuda-turnos.mp4 (y opcional .webm).
-                2) Colocá los subtítulos en public/assets/ayuda-turnos.es.vtt (formato WebVTT).
-                3) Descomentá las líneas <source> y <track> de abajo.
-              El resto (controles, sin autoplay, transcripción) ya cumple WCAG 1.2.x y 1.4.2.
-            -->
-            <video class="video-frame" controls preload="metadata" playsinline
-                   aria-label="Video de ayuda institucional" aria-describedby="videoPlaceholderNote">
-              <!-- <source src="public/assets/ayuda-turnos.mp4" type="video/mp4" /> -->
-              <!-- <track kind="captions" src="public/assets/ayuda-turnos.es.vtt" srclang="es" label="Español (subtítulos)" default /> -->
-              <p class="video-fallback">
-                Su navegador no puede reproducir el video, o todavía no fue incorporado.
-                <a href="#accesibilidad" data-route="accesibilidad">Consulte la ayuda en texto y en otros idiomas</a>.
-              </p>
-            </video>
-            <span class="video-pending" aria-hidden="true">Video de ayuda · próximamente</span>
-            <figcaption class="sr-only">Video institucional de ayuda para gestionar turnos. Incluirá subtítulos sincronizados, transcripción textual y audiodescripción.</figcaption>
-          </figure>
+          <div class="video-frame video-embed-card">
+            <iframe
+              title="Video de ayuda: Dominando el Sistema de Turnos y su Accesibilidad"
+              src="https://app.heygen.com/embeds/dominando-el-sistema-de-turnos-y-su-accesibilidad-5792c19b502e43c4a87d745ebe0af09c"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
           <div>
             <h3 id="videoPlaceholderTitle">Video de ayuda institucional</h3>
-            <p id="videoPlaceholderNote">Cuando se incorpore el video se reproducirá con controles y sin inicio automático, e incluirá subtítulos sincronizados, transcripción textual y audiodescripción.</p>
-            <details class="video-transcript">
-              <summary>Ver transcripción del video</summary>
-              <p>Para gestionar su turno: primero identifíquese en el registro con sus datos. Luego reserve el turno eligiendo trámite, sede, fecha y hora; al confirmar, el sistema genera un token con formato TUR-123456. Finalmente, consulte el seguimiento con ese token para ver el estado, la sede, la oficina, el funcionario asignado, la fecha y la hora.</p>
-            </details>
+            <p>Video explicativo sobre el uso del sistema de turnos y sus opciones de accesibilidad. Si el reproductor no carga, abra el video en una pestaña nueva.</p>
+            <p><a href="https://app.heygen.com/videos/dominando-el-sistema-de-turnos-y-su-accesibilidad-5792c19b502e43c4a87d745ebe0af09c" target="_blank" rel="noopener noreferrer">Abrir video en HeyGen</a></p>
           </div>
         </section>
-
-        <!-- Landing: CTA de cierre -->
-        <section class="cta-band" aria-labelledby="ctaTitle">
-          <div class="cta-copy">
-            <h3 id="ctaTitle">¿Listo para agendar su atención?</h3>
-            <p>Reserve su turno en minutos y consúltelo cuando quiera con su token.</p>
-          </div>
-          <div class="cta-actions">
-            <a class="btn btn-primary" href="#reserva" data-route="reserva">Reservar un turno</a>
-            <a class="btn btn-quiet" href="#seguimiento" data-route="seguimiento">Consultar seguimiento</a>
-          </div>
-        </section>
-
       </div>
     </section>
 
     <section class="app-view" id="view-registro" data-view="registro" aria-labelledby="registroTitle" hidden>
       <div class="view-shell">
         <div class="view-intro">
-          <p class="step-label"><span class="step-chip">Paso 1 de 3</span></p>
+          <p class="step-label">Vista 1</p>
           <h2 id="registroTitle">Registro / Login ciudadano</h2>
           <p>Identifique al ciudadano para habilitar la reserva de turnos.</p>
-          <ol class="mini-steps" aria-label="Progreso del trámite">
-            <li aria-current="step">Registro</li>
-            <li>Reserva</li>
-            <li>Seguimiento</li>
-          </ol>
         </div>
         <form class="form-card" id="citizenForm" novalidate>
+          <fieldset>
+            <legend>Acceso al sistema</legend>
+            <div class="login-help" role="note">
+              <strong>Usuarios de prueba:</strong> normal / normal123 ? admin / admin123
+            </div>
+            <div class="field" data-field="usuario">
+              <label for="usuario">Usuario <span aria-hidden="true">*</span></label>
+              <input id="usuario" name="usuario" type="text" autocomplete="username" aria-required="true" aria-describedby="hintUsuario errorUsuario" />
+              <p class="hint" id="hintUsuario">Use normal para ciudadano o admin para administraci?n.</p>
+              <p class="error-text" id="errorUsuario"></p>
+            </div>
+            <div class="field" data-field="password">
+              <label for="password">Contrase?a <span aria-hidden="true">*</span></label>
+              <input id="password" name="password" type="password" autocomplete="current-password" aria-required="true" aria-describedby="hintPassword errorPassword" />
+              <p class="hint" id="hintPassword">Credenciales: normal123 o admin123.</p>
+              <p class="error-text" id="errorPassword"></p>
+            </div>
+          </fieldset>
+
           <fieldset>
             <legend>Datos del ciudadano</legend>
             <div class="field" data-field="nombre">
@@ -260,14 +170,9 @@
     <section class="app-view" id="view-reserva" data-view="reserva" aria-labelledby="reservaTitle" hidden>
       <div class="view-shell">
         <div class="view-intro">
-          <p class="step-label"><span class="step-chip">Paso 2 de 3</span></p>
+          <p class="step-label">Vista 2</p>
           <h2 id="reservaTitle">Selección y reserva de turno</h2>
           <p>Complete los datos del trámite. Al confirmar se generará un token de seguimiento.</p>
-          <ol class="mini-steps" aria-label="Progreso del trámite">
-            <li>Registro</li>
-            <li aria-current="step">Reserva</li>
-            <li>Seguimiento</li>
-          </ol>
         </div>
         <form class="form-card" id="appointmentForm" novalidate>
           <fieldset>
@@ -334,14 +239,9 @@
     <section class="app-view" id="view-seguimiento" data-view="seguimiento" aria-labelledby="seguimientoTitle" hidden>
       <div class="view-shell">
         <div class="view-intro">
-          <p class="step-label"><span class="step-chip">Paso 3 de 3</span></p>
+          <p class="step-label">Vista 3</p>
           <h2 id="seguimientoTitle">Confirmación y seguimiento del turno</h2>
           <p>Ingrese el token generado en la reserva para consultar la información del turno.</p>
-          <ol class="mini-steps" aria-label="Progreso del trámite">
-            <li>Registro</li>
-            <li>Reserva</li>
-            <li aria-current="step">Seguimiento</li>
-          </ol>
         </div>
         <form class="form-card" id="trackingForm" novalidate>
           <fieldset>
@@ -392,9 +292,9 @@
     <section class="app-view" id="view-accesibilidad" data-view="accesibilidad" aria-labelledby="accessibilityTitle" hidden>
       <div class="view-shell accessibility-shell">
         <div class="view-intro">
-          <p class="step-label"><span class="step-chip">Módulo accesible</span></p>
+          <p class="step-label">Módulo accesible</p>
           <h2 id="accessibilityTitle">Accesibilidad WCAG 2.2</h2>
-          <p class="view-byline">LÓPEZ MACIAS DERLIS</p>
+          <p>L?PEZ MACIAS DERLIS</p>
           <p>Esta vista documenta cómo el formulario cubre alternativas textuales, multimedia, color, contraste, texto, tiempo, movimiento y orientación.</p>
         </div>
 
@@ -508,6 +408,72 @@
       </div>
     </section>
 
+    <section class="app-view" id="view-admin" data-view="admin" aria-labelledby="adminTitle" hidden>
+      <div class="view-shell admin-shell">
+        <div class="view-intro">
+          <p class="step-label">Vista admin</p>
+          <h2 id="adminTitle">Administración de sedes y trámites</h2>
+          <p>Cree nuevas sedes y trámites. La reserva usa este catálogo y evita horarios ya ocupados.</p>
+        </div>
+
+        <div class="admin-panel">
+          <form class="form-card" id="officeForm" novalidate>
+            <fieldset>
+              <legend>Nueva sede</legend>
+              <div class="field" data-field="adminSede">
+                <label for="adminSede">Nombre de sede <span aria-hidden="true">*</span></label>
+                <input id="adminSede" name="adminSede" type="text" aria-required="true" />
+                <p class="error-text" id="errorAdminSede"></p>
+              </div>
+              <div class="field" data-field="adminOficina">
+                <label for="adminOficina">Oficina o ventanilla <span aria-hidden="true">*</span></label>
+                <input id="adminOficina" name="adminOficina" type="text" aria-required="true" />
+                <p class="error-text" id="errorAdminOficina"></p>
+              </div>
+              <div class="field" data-field="adminFuncionario">
+                <label for="adminFuncionario">Funcionario asignado <span aria-hidden="true">*</span></label>
+                <input id="adminFuncionario" name="adminFuncionario" type="text" aria-required="true" />
+                <p class="error-text" id="errorAdminFuncionario"></p>
+              </div>
+            </fieldset>
+            <div class="actions">
+              <button type="submit">Agregar sede</button>
+            </div>
+            <div class="form-result" id="officeResult" role="status" aria-live="polite"></div>
+          </form>
+
+          <form class="form-card" id="procedureForm" novalidate>
+            <fieldset>
+              <legend>Nuevo trámite</legend>
+              <div class="field" data-field="adminTramite">
+                <label for="adminTramite">Nombre del trámite <span aria-hidden="true">*</span></label>
+                <input id="adminTramite" name="adminTramite" type="text" aria-required="true" />
+                <p class="error-text" id="errorAdminTramite"></p>
+              </div>
+            </fieldset>
+            <div class="actions">
+              <button type="submit">Agregar trámite</button>
+            </div>
+            <div class="form-result" id="procedureResult" role="status" aria-live="polite"></div>
+          </form>
+
+          <section class="catalog-panel" aria-labelledby="catalogTitle">
+            <h3 id="catalogTitle">Catálogo actual</h3>
+            <div class="catalog-grid">
+              <div>
+                <h4>Sedes</h4>
+                <ul id="officeList"></ul>
+              </div>
+              <div>
+                <h4>Trámites</h4>
+                <ul id="procedureList"></ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
     <!-- WCAG 1.2.1 a 1.2.5: Alternativa textual para ayuda multimedia futura, sin audio sin transcripción. -->
     <section class="help-section" aria-labelledby="helpTitle">
       <h2 id="helpTitle">Ayuda accesible</h2>
@@ -517,38 +483,6 @@
       </div>
     </section>
   </main>
-
-  <!-- Pie de página institucional presente en todas las vistas. -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="brand-mark" role="img" aria-label="Escudo institucional">GT</span>
-        <div>
-          <p class="footer-brand-name">Gobierno Digital</p>
-          <p class="footer-brand-desc">Sistema de Gestión de Turnos Inteligente para la atención ciudadana.</p>
-        </div>
-      </div>
-
-      <nav class="footer-col" aria-label="Navegación del sistema">
-        <h2 class="footer-title">Navegación</h2>
-        <a href="#inicio" data-route="inicio">Inicio</a>
-        <a href="#registro" data-route="registro">Registro / Login</a>
-        <a href="#reserva" data-route="reserva">Selección y reserva</a>
-        <a href="#seguimiento" data-route="seguimiento">Confirmación y seguimiento</a>
-        <a href="#accesibilidad" data-route="accesibilidad">Accesibilidad WCAG</a>
-      </nav>
-
-      <div class="footer-col">
-        <h2 class="footer-title">Accesibilidad</h2>
-        <p>Contraste alto, navegación por teclado, lectura por voz y ajustes de texto disponibles en todas las vistas.</p>
-        <p>Sin límite de tiempo para completar los formularios.</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>Atención ciudadana digital. Servicio informativo de gestión de turnos.</p>
-      <p>Construido siguiendo criterios de accesibilidad WCAG 2.2.</p>
-    </div>
-  </footer>
 
   <!-- WCAG 1.4.4, 1.4.3, 1.4.13: controles pequeños visibles en todas las vistas. -->
   <aside class="accessibility-toolbar" aria-label="Opciones rápidas de accesibilidad">
@@ -600,17 +534,22 @@
 
   <script src="src/lib/storage.js"></script>
   <script src="src/lib/validators.js"></script>
+  <script src="src/lib/catalog.js"></script>
   <script src="src/lib/appointments.js"></script>
   <script src="src/components/menu.js"></script>
   <script src="src/components/dialog.js"></script>
   <script src="src/components/translator.js"></script>
   <script src="src/components/accessibility-controls.js"></script>
   <script src="src/components/speech-reader.js"></script>
+  <script src="src/components/keyboard-shortcuts.js"></script>
   <script src="src/views/router.js"></script>
   <script src="src/views/registro.js"></script>
   <script src="src/views/reserva.js"></script>
   <script src="src/views/seguimiento.js"></script>
   <script src="src/views/accesibilidad.js"></script>
+  <script src="src/views/admin.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>
+
+

@@ -15,6 +15,12 @@
     setText('detailTime', appointment.hora);
   }
 
+  function canSeeAppointment(appointment, session) {
+    if (!session) return false;
+    if (session.role === 'admin') return true;
+    return appointment.owner === session.username;
+  }
+
   function initSeguimiento() {
     const form = document.getElementById('trackingForm');
     const result = document.getElementById('seguimientoResult');
@@ -23,32 +29,43 @@
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      const state = TurnosStorage.read();
+      const session = state.session;
+
+      if (!session) {
+        result.className = 'form-result error';
+        result.textContent = 'Debe iniciar sesi?n para consultar sus turnos.';
+        TurnosApp.setStatus('Informaci?n', 'Debe iniciar sesi?n para consultar sus turnos.', 'i');
+        TurnosRouter.showView('registro');
+        details.hidden = true;
+        return;
+      }
 
       if (!TurnosValidators.validateForm(form, ['codigo'])) {
         result.className = 'form-result error';
-        result.textContent = 'Ingrese un token válido para consultar.';
-        TurnosApp.setStatus('Error', 'Ingrese un token válido para consultar.', '!');
+        result.textContent = 'Ingrese un token v?lido para consultar.';
+        TurnosApp.setStatus('Error', 'Ingrese un token v?lido para consultar.', '!');
         details.hidden = true;
         return;
       }
 
       const token = form.elements.codigo.value.trim().toUpperCase();
-      const appointment = TurnosStorage.read().appointments.find((item) => item.token === token);
+      const appointment = state.appointments.find((item) => item.token === token && canSeeAppointment(item, session));
 
       if (!appointment) {
         estado.value = 'No encontrado';
         details.hidden = true;
         result.className = 'form-result error';
-        result.textContent = 'No se encontró un turno registrado con ese token.';
-        TurnosApp.setStatus('Error', 'No se encontró un turno registrado con ese token.', '!');
+        result.textContent = 'No se encontr? un turno suyo con ese token.';
+        TurnosApp.setStatus('Error', 'No se encontr? un turno suyo con ese token.', '!');
         return;
       }
 
       estado.value = appointment.estado;
       renderDetails(appointment);
       result.className = 'form-result success';
-      result.textContent = 'Turno encontrado. Revise la información agendada.';
-      TurnosApp.setStatus('Éxito', 'Turno encontrado. Revise la información agendada.', '✓');
+      result.textContent = 'Turno encontrado. Revise la informaci?n agendada.';
+      TurnosApp.setStatus('?xito', 'Turno encontrado. Revise la informaci?n agendada.', '?');
     });
 
     form.addEventListener('reset', () => {

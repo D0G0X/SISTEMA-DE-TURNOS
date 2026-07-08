@@ -1,11 +1,51 @@
 (function () {
+  function fillSelect(select, placeholder, values) {
+    const currentValue = select.value;
+    select.innerHTML = '';
+
+    const emptyOption = document.createElement('option');
+    emptyOption.value = '';
+    emptyOption.textContent = placeholder;
+    select.appendChild(emptyOption);
+
+    values.forEach((value) => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = value;
+      select.appendChild(option);
+    });
+
+    if (values.includes(currentValue)) select.value = currentValue;
+  }
+
+  function refreshCatalogOptions() {
+    const catalog = TurnosCatalog.getCatalog();
+    fillSelect(document.getElementById('tramite'), 'Seleccione una opción', catalog.procedures);
+    fillSelect(
+      document.getElementById('sede'),
+      'Seleccione una sede',
+      catalog.offices.map((office) => office.name)
+    );
+  }
+
   function initReserva() {
     const form = document.getElementById('appointmentForm');
     const result = document.getElementById('reservaResult');
 
+    refreshCatalogOptions();
+    window.addEventListener('catalog:updated', refreshCatalogOptions);
+
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const state = TurnosStorage.read();
+
+      if (!state.session || state.session.role !== 'normal') {
+        result.className = 'form-result error';
+        result.textContent = 'Debe iniciar sesi?n como usuario normal para reservar turnos.';
+        TurnosApp.setStatus('Informaci?n', 'Debe iniciar sesi?n como usuario normal para reservar turnos.', 'i');
+        TurnosRouter.showView('registro');
+        return;
+      }
 
       if (!state.citizen) {
         result.className = 'form-result error';
@@ -27,14 +67,24 @@
         return;
       }
 
-      const sede = form.elements.sede.value;
-      const appointment = TurnosAppointments.buildAppointment({
+      const appointmentData = {
+        owner: state.session.username,
         citizen: state.citizen,
         tramite: form.elements.tramite.value,
-        sede,
+        sede: form.elements.sede.value,
         fecha: form.elements.fecha.value,
         hora: form.elements.hora.value
-      });
+      };
+
+      if (TurnosCatalog.hasScheduleConflict(appointmentData)) {
+        result.className = 'form-result error';
+        result.textContent = 'Ese horario ya está ocupado para la sede seleccionada. Elija otra fecha u hora.';
+        TurnosApp.setStatus('Error', 'Ese horario ya está ocupado para la sede seleccionada.', '!');
+        form.elements.hora.focus();
+        return;
+      }
+
+      const appointment = TurnosAppointments.buildAppointment(appointmentData);
 
       TurnosStorage.update((currentState) => {
         currentState.appointments.push(appointment);
@@ -63,5 +113,5 @@
     });
   }
 
-  window.TurnosReserva = { initReserva };
+  window.TurnosReserva = { initReserva, refreshCatalogOptions };
 })();
