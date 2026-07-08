@@ -12,6 +12,7 @@
     TurnosSeguimiento.initSeguimiento();
     TurnosAccesibilidad.initAccesibilidad();
     TurnosAdmin.initAdmin();
+    TurnosAiAssistant.initAiAssistant();
     TurnosAccessibilityControls.initAccessibilityControls();
     TurnosSpeechReader.initSpeechReader();
     TurnosKeyboardShortcuts.initKeyboardShortcuts();

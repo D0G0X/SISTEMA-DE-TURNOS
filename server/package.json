@@ -2,7 +2,12 @@
   "name": "turnos-server",
   "private": true,
   "type": "module",
-  "description": "API de sincronizacion a Postgres + chatbot de consulta (Grok + MCP)",
+  "description": "API de sincronizacion a Postgres + chatbot OpenAI + seguimiento IA",
+  "scripts": {
+    "start": "node server.mjs",
+    "tracker": "node tracker.mjs",
+    "chat": "node chat.mjs"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "pg": "^8.13.0"

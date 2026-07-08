@@ -16,7 +16,9 @@
       hora,
       oficina: assignment ? assignment.room : 'Oficina por asignar',
       funcionario: assignment ? assignment.agent : 'Funcionario por asignar',
-      estado: 'Turno agendado'
+      estado: 'Turno agendado',
+      aiInsight: '',
+      trackingEvents: []
     };
   }
 

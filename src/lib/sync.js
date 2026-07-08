@@ -3,9 +3,9 @@
   // caída, la app sigue funcionando con localStorage (no rompe nada).
   var API = window.TURNOS_API || 'http://127.0.0.1:3001';
 
-  function send(path, data) {
+  function send(path, data, method) {
     fetch(API + path, {
-      method: 'POST',
+      method: method || 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }).catch(function () { /* sin conexión: se conserva la copia local */ });
@@ -32,5 +32,22 @@
     });
   }
 
-  window.TurnosSync = { saveCitizen: saveCitizen, saveAppointment: saveAppointment };
+  function updateAppointmentStatus(appointment) {
+    send('/api/appointments/' + encodeURIComponent(appointment.token), {
+      estado: appointment.estado,
+      ai_insight: appointment.aiInsight || '',
+      tramite: appointment.tramite,
+      sede: appointment.sede,
+      oficina: appointment.oficina,
+      funcionario: appointment.funcionario,
+      fecha: appointment.fecha,
+      hora: appointment.hora
+    }, 'PATCH');
+  }
+
+  window.TurnosSync = {
+    saveCitizen: saveCitizen,
+    saveAppointment: saveAppointment,
+    updateAppointmentStatus: updateAppointmentStatus
+  };
 })();

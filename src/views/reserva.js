@@ -85,6 +85,7 @@
       }
 
       const appointment = TurnosAppointments.buildAppointment(appointmentData);
+      TurnosAppointmentTracking.applyLocalTracking(appointment);
 
       TurnosStorage.update((currentState) => {
         currentState.appointments.push(appointment);
