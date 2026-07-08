@@ -63,11 +63,12 @@ sistema-turnos-inteligente/
 
 ## Vistas disponibles
 
-1. Inicio: introducción del sistema, imagen principal y espacio reservado para video institucional.
+1. Inicio: introducción del sistema, imagen principal y video institucional embebido desde HeyGen.
 2. Registro / Login ciudadano: formulario de identificación del ciudadano.
 3. Selección y reserva: formulario para elegir trámite, sede, fecha y hora.
 4. Confirmación y seguimiento: consulta del turno mediante token.
 5. Accesibilidad WCAG: criterios y ayudas de accesibilidad.
+6. Administración: creación de sedes y trámites.
 
 ## Flujo funcional
 
@@ -76,6 +77,8 @@ sistema-turnos-inteligente/
 3. El sistema genera un token con formato `TUR-123456`.
 4. En seguimiento se consulta el token.
 5. El sistema muestra estado, ciudadano, trámite, sede, oficina, funcionario, fecha y hora.
+
+La reserva valida que una sede no tenga dos turnos en la misma fecha y hora. Si el horario ya está ocupado, el sistema solicita seleccionar otra fecha u hora.
 
 ## Controles de accesibilidad
 

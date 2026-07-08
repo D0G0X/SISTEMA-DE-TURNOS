@@ -1,8 +1,34 @@
 (function () {
-  const routes = ['inicio', 'registro', 'reserva', 'seguimiento', 'accesibilidad'];
+  const routes = ['inicio', 'registro', 'reserva', 'seguimiento', 'accesibilidad', 'admin'];
+
+  function getSession() {
+    return TurnosStorage.read().session || null;
+  }
+
+  function isAdmin() {
+    const session = getSession();
+    return Boolean(session && session.role === 'admin');
+  }
+
+  function updateRoleNavigation() {
+    document.querySelectorAll('[data-admin-only]').forEach((item) => {
+      item.hidden = !isAdmin();
+    });
+  }
+
+  function canAccess(route) {
+    if (route !== 'admin') return true;
+    return isAdmin();
+  }
 
   function showView(route) {
-    const safeRoute = routes.includes(route) ? route : 'inicio';
+    updateRoleNavigation();
+    let safeRoute = routes.includes(route) ? route : 'inicio';
+
+    if (!canAccess(safeRoute)) {
+      TurnosApp.setStatus('Informaci?n', 'Debe iniciar sesi?n como admin para entrar a Administraci?n.', 'i');
+      safeRoute = 'registro';
+    }
 
     document.querySelectorAll('.app-view').forEach((view) => {
       const isActive = view.dataset.view === safeRoute;
@@ -30,9 +56,10 @@
       });
     });
 
+    window.addEventListener('auth:updated', updateRoleNavigation);
     const initialRoute = window.location.hash.replace('#', '') || 'inicio';
     showView(initialRoute);
   }
 
-  window.TurnosRouter = { initRouter, showView };
+  window.TurnosRouter = { initRouter, showView, updateRoleNavigation };
 })();

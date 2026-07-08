@@ -11,8 +11,10 @@
     TurnosReserva.initReserva();
     TurnosSeguimiento.initSeguimiento();
     TurnosAccesibilidad.initAccesibilidad();
+    TurnosAdmin.initAdmin();
     TurnosAccessibilityControls.initAccessibilityControls();
     TurnosSpeechReader.initSpeechReader();
+    TurnosKeyboardShortcuts.initKeyboardShortcuts();
   }
 
   window.TurnosApp = { setStatus };
