@@ -259,7 +259,35 @@
 
     // Dialogo
     'Confirmación': 'Confirmation',
-    'Aceptar': 'Accept'
+    'Aceptar': 'Accept',
+
+    // Login, video y administración (merge d2220fc)
+    'Administración': 'Administration',
+    'Vista 1': 'View 1',
+    'Vista 2': 'View 2',
+    'Vista 3': 'View 3',
+    'Vista admin': 'Admin view',
+    'Video de ayuda: Dominando el Sistema de Turnos y su Accesibilidad': 'Help video: Mastering the Appointment System and its Accessibility',
+    'Video explicativo sobre el uso del sistema de turnos y sus opciones de accesibilidad. Si el reproductor no carga, abra el video en una pestaña nueva.': 'Explanatory video about using the appointment system and its accessibility options. If the player does not load, open the video in a new tab.',
+    'Abrir video en HeyGen': 'Open video on HeyGen',
+    'Acceso al sistema': 'System access',
+    'Usuarios de prueba:': 'Test users:',
+    'Usuario': 'Username',
+    'Use normal para ciudadano o admin para administración.': 'Use normal for citizen or admin for administration.',
+    'Contraseña': 'Password',
+    'Credenciales: normal123 o admin123.': 'Credentials: normal123 or admin123.',
+    'Administración de sedes y trámites': 'Office and procedure administration',
+    'Cree nuevas sedes y trámites. La reserva usa este catálogo y evita horarios ya ocupados.': 'Create new offices and procedures. Booking uses this catalog and avoids already-taken time slots.',
+    'Nueva sede': 'New office',
+    'Nombre de sede': 'Office name',
+    'Oficina o ventanilla': 'Office or window',
+    'Agregar sede': 'Add office',
+    'Nuevo trámite': 'New procedure',
+    'Nombre del trámite': 'Procedure name',
+    'Agregar trámite': 'Add procedure',
+    'Catálogo actual': 'Current catalog',
+    'Sedes': 'Offices',
+    'Trámites': 'Procedures'
   };
 
   var REVERSE = {};
