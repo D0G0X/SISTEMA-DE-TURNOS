@@ -106,6 +106,82 @@ npm run chat
 
 Si la clave fue pegada en un chat o repositorio, revocala y genera una nueva antes de usarla.
 
+## Deploy en Render y Vercel
+
+### 1. Backend en Render
+
+El backend se despliega desde `render.yaml`.
+
+Pasos recomendados:
+
+1. Subir el repositorio a GitHub.
+2. En Render, crear un nuevo Blueprint desde el repositorio.
+3. Render detectara `render.yaml` y creara:
+   - servicio web `sistema-turnos-api`
+   - base de datos `sistema-turnos-db`
+4. En variables de entorno de Render agregar:
+
+```text
+OPENAI_API_KEY=TU_CLAVE_NUEVA
+```
+
+Variables ya preparadas en `render.yaml`:
+
+```text
+HOST=0.0.0.0
+AI_PROVIDER=openai
+OPENAI_MODEL=gpt-5.5
+ALLOWED_ORIGINS=*
+DATABASE_URL=<Render lo conecta automaticamente>
+CHATBOT_DB_URL=<Render lo conecta automaticamente>
+```
+
+Endpoint de prueba:
+
+```text
+https://sistema-turnos-api.onrender.com/api/health
+```
+
+### 2. Frontend en Vercel
+
+El frontend se despliega como sitio estatico desde la raiz del repositorio.
+
+Configuracion incluida:
+
+- `vercel.json`
+- `.vercelignore`
+- `src/config.js`
+
+En Vercel:
+
+1. Importar el repositorio.
+2. Framework preset: `Other`.
+3. Build command: dejar vacio.
+4. Output directory: dejar vacio o `.`.
+5. Deploy.
+
+Cuando Render entregue la URL real del backend, actualizar esta linea en `src/config.js`:
+
+```js
+var renderApi = 'https://sistema-turnos-api.onrender.com';
+```
+
+Tambien se puede cambiar temporalmente desde la consola del navegador:
+
+```js
+localStorage.setItem('TURNOS_API_URL', 'https://TU-BACKEND.onrender.com');
+location.reload();
+```
+
+### 3. Prueba final post-deploy
+
+1. Abrir el sitio de Vercel.
+2. Iniciar sesion con `normal / normal123`.
+3. Reservar un turno.
+4. Consultar el token en seguimiento.
+5. Abrir el asistente `Turni`.
+6. Verificar que el backend responda en `/api/health`.
+
 ## Arquitectura
 
 - `src/views`: logica especifica de cada vista.
