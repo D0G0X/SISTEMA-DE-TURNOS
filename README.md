@@ -1,125 +1,118 @@
-# Sistema de Gestión de Turnos Inteligente
+# Sistema de Gestion de Turnos Inteligente
 
-Proyecto frontend puro para un sistema gubernamental de registro, reserva y seguimiento de turnos, con controles de accesibilidad WCAG.
+Proyecto frontend para un sistema gubernamental de registro, reserva y seguimiento de turnos, con controles de accesibilidad WCAG.
 
 ## Requisitos
 
-- Tener instalado Python 3.
-- Usar un navegador moderno como Chrome, Edge o Firefox.
-- No requiere Node.js ni instalación de dependencias.
+- Python 3 para ejecutar el frontend local.
+- Navegador moderno: Chrome, Edge o Firefox.
+- Node.js solo si se quiere ejecutar la API local, Postgres o el chatbot.
 
-## Cómo ejecutar el proyecto
-
-1. Abrir PowerShell.
-2. Entrar a la carpeta del proyecto:
+## Ejecutar el frontend
 
 ```powershell
 cd "C:\Users\D0G0X\OneDrive\Documentos\USABILIDAD\prototipos\sistema-turnos-inteligente"
-```
-
-3. Iniciar un servidor local:
-
-```powershell
 python -m http.server 5173 --bind 127.0.0.1
 ```
 
-4. Abrir en el navegador:
+Abrir:
 
 ```text
 http://127.0.0.1:5173/
 ```
 
-Para detener el servidor, volver a PowerShell y presionar `Ctrl + C`.
+Para detener el servidor, presionar `Ctrl + C` en PowerShell.
 
-## Estructura del proyecto
+## Credenciales de prueba
 
-```text
-sistema-turnos-inteligente/
-  index.html
-  README.md
-  public/
-    assets/
-  src/
-    app.js
-    components/
-      accessibility-controls.js
-      dialog.js
-      menu.js
-      speech-reader.js
-      translator.js
-    lib/
-      appointments.js
-      storage.js
-      validators.js
-    styles/
-      main.css
-    views/
-      accesibilidad.js
-      registro.js
-      reserva.js
-      router.js
-      seguimiento.js
-```
+- Usuario normal: `normal`
+- Contrasena normal: `normal123`
+- Usuario admin: `admin`
+- Contrasena admin: `admin123`
 
-## Vistas disponibles
+El admin entra sin llenar datos de ciudadano. El usuario normal debe completar sus datos personales para que sus turnos queden asociados a su sesion.
 
-1. Inicio: introducción del sistema, imagen principal y video institucional embebido desde HeyGen.
-2. Registro / Login ciudadano: formulario de identificación del ciudadano.
-3. Selección y reserva: formulario para elegir trámite, sede, fecha y hora.
-4. Confirmación y seguimiento: consulta del turno mediante token.
-5. Accesibilidad WCAG: criterios y ayudas de accesibilidad.
-6. Administración: creación de sedes y trámites.
+## Atajos de teclado
+
+- `Ctrl + R`: abrir seleccion y reserva.
+- `Ctrl + S`: abrir confirmacion y seguimiento.
+- `Ctrl + A`: abrir accesibilidad WCAG.
 
 ## Flujo funcional
 
-1. El ciudadano se registra o ingresa sus datos.
-2. Reserva un turno seleccionando trámite, sede, fecha y hora.
+1. Iniciar sesion como ciudadano o admin.
+2. El ciudadano reserva un turno seleccionando tramite, sede, fecha y hora.
 3. El sistema genera un token con formato `TUR-123456`.
 4. En seguimiento se consulta el token.
-5. El sistema muestra estado, ciudadano, trámite, sede, oficina, funcionario, fecha y hora.
+5. El sistema muestra estado, ciudadano, tramite, sede, oficina, funcionario, fecha y hora.
 
-La reserva valida que una sede no tenga dos turnos en la misma fecha y hora. Si el horario ya está ocupado, el sistema solicita seleccionar otra fecha u hora.
+La reserva valida que una sede no tenga dos turnos en la misma fecha y hora.
 
-## Controles de accesibilidad
+## Vistas disponibles
 
-El botón desplegable `Accesibilidad` permite:
+1. Inicio: introduccion del sistema, imagen principal y video institucional.
+2. Registro / Login ciudadano: acceso de usuario normal o admin.
+3. Seleccion y reserva: formulario para elegir tramite, sede, fecha y hora.
+4. Confirmacion y seguimiento: consulta del turno mediante token.
+5. Accesibilidad WCAG: criterios, ayudas y atajos.
+6. Administracion: visible solo para admin; permite crear sedes y tramites.
 
-- Aumentar o disminuir tamaño de texto.
-- Activar alto contraste.
-- Activar espaciado accesible.
-- Forzar reajuste en una columna.
-- Mostrar señales textuales además del color.
-- Verificar imágenes de texto.
-- Reforzar contraste no textual.
-- Mostrar tooltips.
-- Reducir movimiento.
-- Confirmar orientación libre.
-- Confirmar ausencia de límite de tiempo.
-- Ocultar contenido auxiliar.
-- Abrir la vista WCAG.
+## API y chatbot de IA
 
-El botón desplegable de sonido permite:
+No pegues claves API dentro de `index.html` ni en archivos JS del frontend. Eso expone el secreto en el navegador y en GitHub.
 
-- Leer en voz alta la vista actual.
-- Silenciar la lectura.
-- Ajustar el volumen con un control deslizante.
+Para usar el chatbot visible en la pagina se necesita:
 
-## Paleta 70/20/10
+1. Base de datos Postgres local:
 
-La interfaz usa una regla visual 70/20/10:
+```powershell
+cd "C:\Users\D0G0X\OneDrive\Documentos\USABILIDAD\prototipos\sistema-turnos-inteligente"
+docker compose up -d
+```
 
-- 70% color base: azul noche para fondo principal y presencia institucional.
-- 20% color secundario: blanco para tarjetas, formularios y lectura.
-- 10% color acento: azul vivo para acciones, botones y elementos interactivos.
+2. Configurar la API key en el backend. Crear el archivo `server\.env` tomando como base `server\.env.example`:
 
-El amarillo se reserva para el foco visible de teclado, porque cumple una función de accesibilidad.
+```text
+OPENAI_API_KEY=TU_CLAVE_NUEVA_AQUI
+OPENAI_MODEL=gpt-5.5
+DATABASE_URL=postgresql://turnos:turnos@localhost:5433/turnos
+CHATBOT_DB_URL=postgresql://chatbot_ro:chatbot_ro@localhost:5433/turnos
+PORT=3001
+```
+
+3. Ejecutar el backend Node:
+
+```powershell
+cd "C:\Users\D0G0X\OneDrive\Documentos\USABILIDAD\prototipos\sistema-turnos-inteligente\server"
+npm install
+npm start
+```
+
+4. Ejecutar el frontend en otra terminal:
+
+```powershell
+cd "C:\Users\D0G0X\OneDrive\Documentos\USABILIDAD\prototipos\sistema-turnos-inteligente"
+python -m http.server 5173 --bind 127.0.0.1
+```
+
+El boton `IA` aparece en la parte inferior derecha. Muestra el modelo configurado y el estado de MCP.
+
+Para probar solo el chatbot por consola:
+
+```powershell
+cd "C:\Users\D0G0X\OneDrive\Documentos\USABILIDAD\prototipos\sistema-turnos-inteligente\server"
+npm run chat
+```
+
+Si la clave fue pegada en un chat o repositorio, revocala y genera una nueva antes de usarla.
 
 ## Arquitectura
 
-- `src/views`: contiene la lógica específica de cada vista.
-- `src/components`: contiene componentes reutilizables de interfaz.
-- `src/lib`: contiene reglas compartidas, validaciones, almacenamiento y lógica de turnos.
-- `src/styles/main.css`: contiene estilos globales, responsive y estados de accesibilidad.
-- `src/app.js`: inicializa la aplicación.
+- `src/views`: logica especifica de cada vista.
+- `src/components`: componentes reutilizables de interfaz.
+- `src/lib`: reglas compartidas, validaciones, almacenamiento y logica de turnos.
+- `src/styles/main.css`: estilos globales, responsive y estados de accesibilidad.
+- `src/app.js`: inicializa la aplicacion.
+- `server`: API local y chatbot opcional.
 
-La arquitectura evita mezclar toda la lógica en un solo archivo para facilitar que el proyecto pueda crecer.
+La arquitectura separa vistas, componentes y librerias para evitar codigo espagueti y permitir que el proyecto escale.

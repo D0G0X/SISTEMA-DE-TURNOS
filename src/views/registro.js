@@ -63,18 +63,23 @@
         return;
       }
 
-      if (session.role === 'admin') {
+      const isAdminLogin = session.role === 'admin' || form.elements.usuario.value.trim().toLowerCase() === 'admin';
+
+      if (isAdminLogin) {
+        session.role = 'admin';
+        session.label = 'Administrador';
         TurnosStorage.update((state) => {
           state.session = session;
         });
 
+        window.dispatchEvent(new CustomEvent('auth:updated'));
         result.className = 'form-result success';
         result.textContent = 'Administrador identificado correctamente.';
-        TurnosApp.setStatus('?xito', 'Administrador identificado correctamente.', '?');
+        TurnosApp.setStatus('Exito', 'Administrador identificado correctamente.', 'OK');
         TurnosDialog.showDialog({
           title: 'Acceso administrador',
-          message: 'Puede administrar sedes y tr?mites del sistema.',
-          secondaryLabel: 'Ir a administraci?n',
+          message: 'Puede administrar sedes y trámites del sistema.',
+          secondaryLabel: 'Ir a administración',
           onSecondary: () => TurnosRouter.showView('admin')
         });
         return;
@@ -103,7 +108,7 @@
       window.dispatchEvent(new CustomEvent('auth:updated'));
       result.className = 'form-result success';
       result.textContent = 'Ciudadano identificado correctamente. Ya puede reservar un turno.';
-      TurnosApp.setStatus('?xito', 'Ciudadano identificado correctamente.', '?');
+      TurnosApp.setStatus('Exito', 'Ciudadano identificado correctamente.', 'OK');
       TurnosDialog.showDialog({
         title: 'Registro listo',
         message: 'El ciudadano fue identificado. Puede continuar con la reserva del turno.',

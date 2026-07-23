@@ -36,14 +36,28 @@
       <aside class="drawer" id="drawerMenu" aria-label="Opciones del sistema" hidden>
         <div class="drawer-heading">
           <strong>Vistas disponibles</strong>
-          <button class="icon-button" id="closeMenuButton" type="button" aria-label="Cerrar men?">?</button>
+          <button class="icon-button" id="closeMenuButton" type="button" aria-label="Cerrar menú">×</button>
         </div>
         <a href="#inicio" data-route="inicio">Inicio</a>
-        <a href="#registro" data-route="registro">Registro / Login ciudadano</a>
+        <a href="#registro" data-route="registro" data-auth-hidden>Registro / Login ciudadano</a>
         <a href="#reserva" data-route="reserva">Selección y reserva</a>
         <a href="#seguimiento" data-route="seguimiento">Confirmación y seguimiento</a>
         <a href="#accesibilidad" data-route="accesibilidad">Accesibilidad WCAG</a>
-        <a href="#admin" data-route="admin" data-admin-only hidden>Administraci?n</a>
+        <a href="#admin" data-route="admin" data-admin-only hidden>Administración</a>
+
+        <section class="drawer-shortcuts" aria-labelledby="shortcutsMenuTitle">
+          <h2 id="shortcutsMenuTitle">Atajos de teclado</h2>
+          <ul>
+            <li><kbd>Ctrl</kbd> + <kbd>R</kbd>: abrir reserva</li>
+            <li><kbd>Ctrl</kbd> + <kbd>S</kbd>: abrir seguimiento</li>
+            <li><kbd>Ctrl</kbd> + <kbd>A</kbd>: abrir accesibilidad</li>
+          </ul>
+        </section>
+
+        <section class="drawer-session" data-auth-only hidden aria-live="polite">
+          <p id="sessionLabel">Sesión activa</p>
+          <button type="button" class="secondary-button drawer-logout" id="logoutButton">Cerrar sesión</button>
+        </section>
       </aside>
     </nav>
   </header>
@@ -312,6 +326,15 @@
             <div class="translated-help" id="translatedHelp" role="status" aria-live="polite"></div>
           </section>
 
+          <section class="shortcuts-card" aria-labelledby="shortcutsViewTitle">
+            <h3 id="shortcutsViewTitle">Atajos de teclado disponibles</h3>
+            <ul>
+              <li><kbd>Ctrl</kbd> + <kbd>R</kbd>: abrir selección y reserva.</li>
+              <li><kbd>Ctrl</kbd> + <kbd>S</kbd>: abrir confirmación y seguimiento.</li>
+              <li><kbd>Ctrl</kbd> + <kbd>A</kbd>: abrir accesibilidad WCAG.</li>
+            </ul>
+          </section>
+
           <section aria-labelledby="wcagTextMediaTitle">
             <h3 id="wcagTextMediaTitle">Alternativas textuales y multimedia</h3>
             <div class="criteria-grid">
@@ -522,6 +545,31 @@
     </div>
   </details>
 
+  <!-- Chatbot IA: usa backend local; la API key no se expone en el navegador. -->
+  <aside class="chatbot-panel" id="chatbotPanel" aria-label="Asistente IA de turnos">
+    <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-expanded="false" aria-controls="chatbotBox" onclick="window.toggleTurnosChatbot && window.toggleTurnosChatbot()">
+      IA
+    </button>
+    <section class="chatbot-box" id="chatbotBox" hidden aria-labelledby="chatbotTitle">
+      <div class="chatbot-header">
+        <div>
+          <h2 id="chatbotTitle">Asistente IA</h2>
+          <p id="chatbotModel">Modelo: conectando...</p>
+        </div>
+        <button type="button" class="icon-button chatbot-close" id="chatbotClose" aria-label="Cerrar asistente IA">×</button>
+      </div>
+      <div class="chatbot-messages" id="chatbotMessages" role="log" aria-live="polite" aria-label="Conversación con asistente IA">
+        <p class="chatbot-message bot">Hola. Puedo ayudarte a entender cómo reservar un turno o consultar el seguimiento con tu token.</p>
+      </div>
+      <form class="chatbot-form" id="chatbotForm">
+        <label class="sr-only" for="chatbotInput">Pregunta para el asistente IA</label>
+        <textarea id="chatbotInput" rows="2" maxlength="800" placeholder="Ejemplo: consulta el token TUR-123456"></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+      <p class="chatbot-status" id="chatbotStatus" role="status" aria-live="polite"></p>
+    </section>
+  </aside>
+
   <!-- WCAG 1.4.13 y 4.1.2: Diálogo accesible para confirmaciones y token generado. -->
   <dialog class="app-dialog" id="appDialog" aria-labelledby="dialogTitle" aria-describedby="dialogMessage">
     <h2 id="dialogTitle">Confirmación</h2>
@@ -543,9 +591,10 @@
   <script src="src/components/translator.js"></script>
   <script src="src/components/accessibility-controls.js"></script>
   <script src="src/components/speech-reader.js"></script>
-  <script src="src/components/keyboard-shortcuts.js"></script>
-  <script src="src/views/router.js"></script>
-  <script src="src/views/registro.js"></script>
+  <script src="src/components/keyboard-shortcuts.js?v=2"></script>
+  <script src="src/components/chatbot.js?v=4"></script>
+  <script src="src/views/router.js?v=2"></script>
+  <script src="src/views/registro.js?v=2"></script>
   <script src="src/views/reserva.js"></script>
   <script src="src/views/seguimiento.js"></script>
   <script src="src/views/accesibilidad.js"></script>

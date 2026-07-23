@@ -15,6 +15,7 @@
     TurnosAccessibilityControls.initAccessibilityControls();
     TurnosSpeechReader.initSpeechReader();
     TurnosKeyboardShortcuts.initKeyboardShortcuts();
+    TurnosChatbot.initChatbot();
   }
 
   window.TurnosApp = { setStatus };

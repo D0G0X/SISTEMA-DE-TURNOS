@@ -7,13 +7,19 @@
       if (key === 'r') {
         event.preventDefault();
         TurnosRouter.showView('reserva');
-        TurnosApp.setStatus('Informaci?n', 'Atajo Ctrl+R: vista de reserva abierta.', 'i');
+        TurnosApp.setStatus('Información', 'Atajo Ctrl+R: vista de reserva abierta.', 'i');
       }
 
       if (key === 's') {
         event.preventDefault();
         TurnosRouter.showView('seguimiento');
-        TurnosApp.setStatus('Informaci?n', 'Atajo Ctrl+S: vista de seguimiento abierta.', 'i');
+        TurnosApp.setStatus('Información', 'Atajo Ctrl+S: vista de seguimiento abierta.', 'i');
+      }
+
+      if (key === 'a') {
+        event.preventDefault();
+        TurnosRouter.showView('accesibilidad');
+        TurnosApp.setStatus('Información', 'Atajo Ctrl+A: vista de accesibilidad abierta.', 'i');
       }
     });
   }

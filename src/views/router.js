@@ -11,9 +11,26 @@
   }
 
   function updateRoleNavigation() {
+    const session = getSession();
+
     document.querySelectorAll('[data-admin-only]').forEach((item) => {
-      item.hidden = !isAdmin();
+      item.hidden = !(session && session.role === 'admin');
     });
+
+    document.querySelectorAll('[data-auth-hidden]').forEach((item) => {
+      item.hidden = Boolean(session);
+    });
+
+    document.querySelectorAll('[data-auth-only]').forEach((item) => {
+      item.hidden = !session;
+    });
+
+    const sessionLabel = document.getElementById('sessionLabel');
+    if (sessionLabel) {
+      sessionLabel.textContent = session
+        ? 'Sesión activa: ' + session.label + ' (' + session.username + ')'
+        : 'Sin sesión activa';
+    }
   }
 
   function canAccess(route) {
@@ -26,7 +43,7 @@
     let safeRoute = routes.includes(route) ? route : 'inicio';
 
     if (!canAccess(safeRoute)) {
-      TurnosApp.setStatus('Informaci?n', 'Debe iniciar sesi?n como admin para entrar a Administraci?n.', 'i');
+      TurnosApp.setStatus('Información', 'Debe iniciar sesión como admin para entrar a Administración.', 'i');
       safeRoute = 'registro';
     }
 
@@ -48,6 +65,17 @@
     document.getElementById('main-content').focus();
   }
 
+  function logout() {
+    TurnosStorage.update((state) => {
+      state.session = null;
+      state.citizen = null;
+    });
+
+    window.dispatchEvent(new CustomEvent('auth:updated'));
+    TurnosApp.setStatus('Información', 'Sesión cerrada correctamente.', 'i');
+    showView('inicio');
+  }
+
   function initRouter() {
     document.querySelectorAll('[data-route]').forEach((link) => {
       link.addEventListener('click', (event) => {
@@ -56,10 +84,15 @@
       });
     });
 
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+      logoutButton.addEventListener('click', logout);
+    }
+
     window.addEventListener('auth:updated', updateRoleNavigation);
     const initialRoute = window.location.hash.replace('#', '') || 'inicio';
     showView(initialRoute);
   }
 
-  window.TurnosRouter = { initRouter, showView, updateRoleNavigation };
+  window.TurnosRouter = { initRouter, showView, updateRoleNavigation, logout };
 })();
