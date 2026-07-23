@@ -21,60 +21,100 @@
     return appointment.owner === session.username;
   }
 
-  function initSeguimiento() {
-    const form = document.getElementById('trackingForm');
-    const result = document.getElementById('seguimientoResult');
-    const details = document.getElementById('trackingDetails');
-    const estado = document.getElementById('estado');
+  function applyTrackingToAppointment(appointment) {
+    TurnosAppointmentTracking.applyLocalTracking(appointment);
+    TurnosStorage.update(function (state) {
+      var idx = state.appointments.findIndex(function (item) {
+        return item.token === appointment.token;
+      });
+      if (idx >= 0) state.appointments[idx] = appointment;
+    });
+    if (typeof TurnosSync !== 'undefined' && TurnosSync.updateAppointmentStatus) {
+      TurnosSync.updateAppointmentStatus(appointment);
+    }
+  }
 
-    form.addEventListener('submit', (event) => {
+  function showTrackedAppointment(appointment, bundle) {
+    renderDetails(appointment);
+    TurnosAiAssistant.bindToToken(appointment.token, bundle);
+    TurnosAiAssistant.setInsight(appointment.aiInsight || (bundle && bundle.appointment && bundle.appointment.ai_insight));
+    if (bundle && bundle.events) {
+      TurnosAiAssistant.renderTimeline(bundle.events);
+    }
+  }
+
+  function initSeguimiento() {
+    var form = document.getElementById('trackingForm');
+    var result = document.getElementById('seguimientoResult');
+    var details = document.getElementById('trackingDetails');
+    var estado = document.getElementById('estado');
+
+    form.addEventListener('submit', function (event) {
       event.preventDefault();
-      const state = TurnosStorage.read();
-      const session = state.session;
+      var state = TurnosStorage.read();
+      var session = state.session;
 
       if (!session) {
         result.className = 'form-result error';
-        result.textContent = 'Debe iniciar sesi?n para consultar sus turnos.';
-        TurnosApp.setStatus('Informaci?n', 'Debe iniciar sesi?n para consultar sus turnos.', 'i');
+        result.textContent = 'Debe iniciar sesión para consultar sus turnos.';
+        TurnosApp.setStatus('Información', 'Debe iniciar sesión para consultar sus turnos.', 'i');
         TurnosRouter.showView('registro');
         details.hidden = true;
+        TurnosAiAssistant.clearPanel();
         return;
       }
 
       if (!TurnosValidators.validateForm(form, ['codigo'])) {
         result.className = 'form-result error';
-        result.textContent = 'Ingrese un token v?lido para consultar.';
-        TurnosApp.setStatus('Error', 'Ingrese un token v?lido para consultar.', '!');
+        result.textContent = 'Ingrese un token válido para consultar.';
+        TurnosApp.setStatus('Error', 'Ingrese un token válido para consultar.', '!');
         details.hidden = true;
+        TurnosAiAssistant.clearPanel();
         return;
       }
 
-      const token = form.elements.codigo.value.trim().toUpperCase();
-      const appointment = state.appointments.find((item) => item.token === token && canSeeAppointment(item, session));
+      var token = form.elements.codigo.value.trim().toUpperCase();
+      var appointment = state.appointments.find(function (item) {
+        return item.token === token && canSeeAppointment(item, session);
+      });
 
       if (!appointment) {
         estado.value = 'No encontrado';
         details.hidden = true;
         result.className = 'form-result error';
-        result.textContent = 'No se encontr? un turno suyo con ese token.';
-        TurnosApp.setStatus('Error', 'No se encontr? un turno suyo con ese token.', '!');
+        result.textContent = 'No se encontró un turno suyo con ese token.';
+        TurnosApp.setStatus('Error', 'No se encontró un turno suyo con ese token.', '!');
+        TurnosAiAssistant.clearPanel();
         return;
       }
 
+      applyTrackingToAppointment(appointment);
       estado.value = appointment.estado;
-      renderDetails(appointment);
+      showTrackedAppointment(appointment, null);
+
+      TurnosTracker.syncTracking(token).then(function (bundle) {
+        var refreshed = TurnosStorage.read().appointments.find(function (item) {
+          return item.token === token;
+        });
+        if (refreshed) {
+          estado.value = refreshed.estado;
+          showTrackedAppointment(refreshed, bundle);
+        }
+      });
+
       result.className = 'form-result success';
-      result.textContent = 'Turno encontrado. Revise la informaci?n agendada.';
-      TurnosApp.setStatus('?xito', 'Turno encontrado. Revise la informaci?n agendada.', '?');
+      result.textContent = 'Turno encontrado. Abra a Turni (botón inferior) para consultas.';
+      TurnosApp.setStatus('Éxito', 'Turno encontrado. Turni está disponible.', '✓');
     });
 
-    form.addEventListener('reset', () => {
-      setTimeout(() => {
+    form.addEventListener('reset', function () {
+      setTimeout(function () {
         TurnosValidators.clearFormState(form);
         result.textContent = '';
         result.className = 'form-result';
         estado.value = 'Pendiente de consulta';
         details.hidden = true;
+        TurnosAiAssistant.clearPanel();
       }, 0);
     });
   }

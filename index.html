@@ -44,20 +44,6 @@
         <a href="#seguimiento" data-route="seguimiento">Confirmación y seguimiento</a>
         <a href="#accesibilidad" data-route="accesibilidad">Accesibilidad WCAG</a>
         <a href="#admin" data-route="admin" data-admin-only hidden>Administración</a>
-
-        <section class="drawer-shortcuts" aria-labelledby="shortcutsMenuTitle">
-          <h2 id="shortcutsMenuTitle">Atajos de teclado</h2>
-          <ul>
-            <li><kbd>Ctrl</kbd> + <kbd>R</kbd>: abrir reserva</li>
-            <li><kbd>Ctrl</kbd> + <kbd>S</kbd>: abrir seguimiento</li>
-            <li><kbd>Ctrl</kbd> + <kbd>A</kbd>: abrir accesibilidad</li>
-          </ul>
-        </section>
-
-        <section class="drawer-session" data-auth-only hidden aria-live="polite">
-          <p id="sessionLabel">Sesión activa</p>
-          <button type="button" class="secondary-button drawer-logout" id="logoutButton">Cerrar sesión</button>
-        </section>
       </aside>
     </nav>
   </header>
@@ -119,11 +105,11 @@
             <div class="field" data-field="usuario">
               <label for="usuario">Usuario <span aria-hidden="true">*</span></label>
               <input id="usuario" name="usuario" type="text" autocomplete="username" aria-required="true" aria-describedby="hintUsuario errorUsuario" />
-              <p class="hint" id="hintUsuario">Use normal para ciudadano o admin para administraci?n.</p>
+              <p class="hint" id="hintUsuario">Use normal para ciudadano o admin para administración.</p>
               <p class="error-text" id="errorUsuario"></p>
             </div>
             <div class="field" data-field="password">
-              <label for="password">Contrase?a <span aria-hidden="true">*</span></label>
+              <label for="password">Contraseña <span aria-hidden="true">*</span></label>
               <input id="password" name="password" type="password" autocomplete="current-password" aria-required="true" aria-describedby="hintPassword errorPassword" />
               <p class="hint" id="hintPassword">Credenciales: normal123 o admin123.</p>
               <p class="error-text" id="errorPassword"></p>
@@ -256,7 +242,7 @@
         <div class="view-intro">
           <p class="step-label">Vista 3</p>
           <h2 id="seguimientoTitle">Confirmación y seguimiento del turno</h2>
-          <p>Ingrese el token generado en la reserva para consultar la información del turno.</p>
+          <p>Ingrese el token generado en la reserva. Use el botón <strong>Turni</strong> (esquina inferior) para hablar con el asistente sobre su turno, sanciones, documentos y más.</p>
         </div>
         <form class="form-card" id="trackingForm" novalidate>
           <fieldset>
@@ -301,6 +287,18 @@
             <div><dt>Hora</dt><dd id="detailTime">-</dd></div>
           </dl>
         </article>
+
+        <aside class="tracking-insight-panel" id="trackingInsightPanel" hidden aria-labelledby="trackingInsightTitle">
+          <section class="ai-insight-section" aria-labelledby="aiInsightTitle">
+            <h3 id="trackingInsightTitle">Seguimiento inteligente</h3>
+            <h4 id="aiInsightTitle">Análisis del turno</h4>
+            <p id="aiInsightText" class="ai-insight-text" role="status" aria-live="polite"></p>
+          </section>
+          <section class="ai-timeline-section" aria-labelledby="timelineTitle">
+            <h4 id="timelineTitle">Historial de seguimiento</h4>
+            <ol id="trackingTimeline" class="tracking-timeline" aria-label="Eventos de seguimiento del turno"></ol>
+          </section>
+        </aside>
       </div>
     </section>
 
@@ -309,7 +307,7 @@
         <div class="view-intro">
           <p class="step-label">Módulo accesible</p>
           <h2 id="accessibilityTitle">Accesibilidad WCAG 2.2</h2>
-          <p>L?PEZ MACIAS DERLIS</p>
+          <p>LÓPEZ MACIAS DERLIS</p>
           <p>Esta vista documenta cómo el formulario cubre alternativas textuales, multimedia, color, contraste, texto, tiempo, movimiento y orientación.</p>
         </div>
 
@@ -581,11 +579,72 @@
     </div>
   </dialog>
 
+  <!-- Asistente virtual flotante (chatbot) -->
+  <div class="chatbot-widget" id="chatbotWidget">
+    <section class="chatbot-window" id="chatbotWindow" hidden aria-labelledby="chatbotTitle" role="dialog" aria-modal="false">
+      <header class="chatbot-header">
+        <div class="chatbot-avatar" id="chatbotAvatar" aria-hidden="true">Tu</div>
+        <div class="chatbot-header-text">
+          <h2 id="chatbotTitle">Turni</h2>
+          <p id="chatbotSubtitle">Asistente Virtual · Sistema de Turnos</p>
+        </div>
+        <div class="chatbot-header-actions">
+          <div class="chatbot-menu-wrap">
+            <button type="button" class="chatbot-menu-btn" id="chatbotMenuBtn" aria-expanded="false" aria-controls="chatbotMenu" aria-label="Opciones de conversación">
+              <span class="chatbot-menu-icon" aria-hidden="true"></span>
+            </button>
+            <div class="chatbot-menu" id="chatbotMenu" hidden role="menu" aria-label="Historial de conversaciones">
+              <button type="button" class="chatbot-menu-item" id="chatbotMenuNew" role="menuitem">Nueva conversación</button>
+              <p class="chatbot-menu-heading" id="chatbotMenuHeading">Conversaciones anteriores</p>
+              <ul class="chatbot-history-list" id="chatbotHistoryList" role="list"></ul>
+              <p class="chatbot-history-empty" id="chatbotHistoryEmpty" hidden>Aún no hay conversaciones guardadas.</p>
+            </div>
+          </div>
+          <button type="button" class="chatbot-close" id="chatbotClose" aria-label="Cerrar chat">×</button>
+        </div>
+      </header>
+
+      <div class="chatbot-insight" id="aiInsightBanner" hidden>
+        <p id="aiInsightBannerText" aria-live="polite"></p>
+      </div>
+
+      <div class="chatbot-messages" id="aiChatLog" role="log" aria-live="polite" aria-relevant="additions"></div>
+      <p class="chatbot-typing" id="chatbotTyping" hidden role="status">El asistente está escribiendo…</p>
+
+      <div class="chatbot-quick" aria-label="Preguntas frecuentes">
+        <button type="button" class="chatbot-quick-btn" data-ai-question="¿Qué pasa si pierdo mi turno, quedo sancionado?">Inasistencia</button>
+        <button type="button" class="chatbot-quick-btn" data-ai-question="¿Cómo reservo un turno?">Reservar</button>
+        <button type="button" class="chatbot-quick-btn" data-ai-question="¿Qué documentos debo llevar?">Documentos</button>
+        <button type="button" class="chatbot-quick-btn" data-ai-question="¿Cuál es el estado de mi turno?">Estado</button>
+      </div>
+
+      <form class="chatbot-form" id="aiChatForm" novalidate>
+        <label class="sr-only" for="aiChatInput">Escriba su pregunta al asistente</label>
+        <input type="text" id="aiChatInput" name="pregunta" placeholder="Escriba su pregunta…" autocomplete="off" />
+        <button type="submit" id="aiChatSubmit" aria-label="Enviar pregunta">Enviar</button>
+      </form>
+    </section>
+
+    <div class="chatbot-launcher" id="chatbotLauncher">
+      <div class="chatbot-teaser" id="chatbotTeaser" role="status" aria-live="polite" hidden>
+        <span class="chatbot-teaser-avatar" aria-hidden="true">Tu</span>
+        <p>¡Hola! ¿En qué te puedo ayudar?</p>
+      </div>
+      <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-expanded="false" aria-controls="chatbotWindow" aria-label="Abrir a Turni, asistente virtual">
+        <span class="chatbot-toggle-icon" aria-hidden="true">💬</span>
+        <span class="chatbot-toggle-label">Turni</span>
+      </button>
+    </div>
+  </div>
+
   <script src="src/lib/storage.js"></script>
   <script src="src/lib/sync.js"></script>
   <script src="src/lib/validators.js"></script>
   <script src="src/lib/catalog.js"></script>
+  <script src="src/lib/appointment-tracking.js"></script>
+  <script src="src/lib/ai-knowledge.js"></script>
   <script src="src/lib/appointments.js"></script>
+  <script src="src/lib/tracker.js"></script>
   <script src="src/components/menu.js"></script>
   <script src="src/components/dialog.js"></script>
   <script src="src/components/translator.js"></script>
@@ -596,6 +655,7 @@
   <script src="src/views/router.js?v=2"></script>
   <script src="src/views/registro.js?v=2"></script>
   <script src="src/views/reserva.js"></script>
+  <script src="src/components/ai-assistant.js"></script>
   <script src="src/views/seguimiento.js"></script>
   <script src="src/views/accesibilidad.js"></script>
   <script src="src/views/admin.js"></script>
